@@ -24,7 +24,7 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_names_route_lowerbound(self):
-        amount = 10
+        amount = 1
         response = self.client.get("/names?amount=" + str(amount))
 
         json_data = json.loads(response.get_data())
@@ -33,7 +33,7 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_names_route_upperbound(self):
-        amount = 1
+        amount = 10
         response = self.client.get("/names?amount=" + str(amount))
 
         json_data = json.loads(response.get_data())
