@@ -22,5 +22,38 @@ class Home(Resource):
         return jsonify("Welcome to PokeMate random name generator!")
 
 
+@api.route("/names")
+class Names(Resource):
+    @api.doc(
+        params={
+            "amount": "number of generated names: accepted range [1..10], default: 1"
+        }
+    )
+    def get(self):
+
+        # parse the request
+        amount = request.args.get("amount")
+
+        # set the default
+        if amount == None:
+            amount = 1
+
+        # typecast
+        try:
+            amount = int(amount)
+        except (ValueError, TypeError):
+            abort(
+                400,
+                "Bad request: check your query parameter. Expected query string: '.../names?amount=5'",
+            )
+
+        if amount > 10 or amount < 1:
+            abort(400, "Bad request: amount out of range: accepted range [1..10]")
+
+        # generate the names
+        names = generator.generate_names(amount)
+        return jsonify(names)
+
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
