@@ -16,7 +16,6 @@ on:
 jobs:
   build:
     runs-on: 
-      matrix:
       - macos-latest
     strategy:
       matrix:
