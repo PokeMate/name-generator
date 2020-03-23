@@ -91,7 +91,7 @@ python -m unittest discover app/
 **GET**
 | Parameter | Type | Required | Default Value | Description |
 | -------- | ---- | ----- | -- | ----------------------------------- |
-| `amount` | `int` | no | 1 | amount of Pokemon names |
+| `amount` | `int` | `no` | `1` | amount of Pokemon names |
 
 ### Example
 
