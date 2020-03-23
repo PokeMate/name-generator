@@ -8,7 +8,13 @@ The model generates new unique Pokemon names with Keras using a recurrent neural
 
 Train the model with the jupyter notebook in `./training/name_generator.ipynb`. It will produce a file which stores the model used to generate new names in `./training/model.h5`.
 
-[Notebook with code and explainations](https://github.com/simon-larsson/pokemon-name-generator/blob/master/name_generator.ipynb)
+To start the jupyter notebook:
+
+```bash
+jupyter notebook
+```
+
+[Notebook with code and explainations](https://github.com/PokeMate/name-generator/blob/master/training/name_generator.ipynb)
 
 ### Sample Pokémon Names
 
@@ -21,14 +27,16 @@ Train the model with the jupyter notebook in `./training/name_generator.ipynb`. 
 | Ponytau  | Jellpid   | Mewable  | Meetty    |
 | Phound   | Passir    | Golduzon | Frislask  |
 
+# Installation
+
 Copy the files that are used for training into the api application:
 
 ```bash
-cp training/names.txt api/static
+cp training/input/names.txt api/static
 cp training/model.h5 api/static/
 ```
 
-## Installing the API (without Docker)
+## without Docker
 
 Create a virtualenv and activate it:
 
@@ -56,7 +64,7 @@ Start the API
 python3 -m app/api.py
 ```
 
-## Installing the API with Docker
+## with Docker
 
 Build the Docker container.
 
@@ -70,18 +78,33 @@ Run the docker container and map the internal port to external port-
 docker run -p 5000:5000/tcp name-generator
 ```
 
-## Access API
-
-### With Swagger
-
-Go to [http://localhost:5000/swagger/](http://localhost:5000/swagger/) to use the interactive Swagger documentation.
-
-### Endpoint
-
-Make a `GET`-request to [http://localhost:5000/names?amount=3](http://localhost:5000/names?amount=3) and specify the amount as a string parameter (default=1).
-
 ## Run tests
 
 ```bash
 python -m unittest discover app/
 ```
+
+## API
+
+`/names?amount=<amount>`
+
+**GET**
+| Parameter | Type | Required | Default Value | Description |
+| -------- | ---- | ----- | -- | ----------------------------------- |
+| `amount` | `int` | no | 1 | amount of Pokemon names |
+
+### Example
+
+```bash
+http://localhost:5000/?amount=5
+```
+
+```json
+["Goigon", "Tangros", "Kalmiphan", "Camermosh", "Wincino"]
+```
+
+## Swagger
+
+Endpoints are documented using Swagger. To access the interactive documentation got to:
+
+`/swagger`
