@@ -27,7 +27,7 @@ jupyter notebook
 | Ponytau  | Jellpid   | Mewable  | Meetty    |
 | Phound   | Passir    | Golduzon | Frislask  |
 
-# Installation
+## API Installation
 
 Copy the files that are used for training into the api application:
 
@@ -36,7 +36,7 @@ cp training/input/names.txt api/static
 cp training/model.h5 api/static/
 ```
 
-## without Docker
+### Without Docker
 
 Create a virtualenv and activate it:
 
@@ -64,7 +64,7 @@ Start the API
 python3 -m app/api.py
 ```
 
-## with Docker
+### With Docker
 
 Build the Docker container.
 
@@ -78,13 +78,13 @@ Run the docker container and map the internal port to external port-
 docker run -p 5000:5000/tcp name-generator
 ```
 
-## Run tests
+### Run tests
 
 ```bash
 python -m unittest discover app/
 ```
 
-## API
+### API
 
 `/names?amount=<amount>`
 
@@ -93,7 +93,7 @@ python -m unittest discover app/
 | -------- | ---- | ----- | -- | ----------------------------------- |
 | `amount` | `int` | `no` | `1` | amount of Pokemon names |
 
-### Example
+#### Example
 
 ```bash
 http://localhost:5000/?amount=5
@@ -103,7 +103,7 @@ http://localhost:5000/?amount=5
 ["Goigon", "Tangros", "Kalmiphan", "Camermosh", "Wincino"]
 ```
 
-## Swagger
+### Swagger
 
 Endpoints are documented using Swagger. To access the interactive documentation got to:
 
