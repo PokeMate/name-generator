@@ -1,7 +1,5 @@
 absl-py==0.9.0
 aniso8601==8.0.0
-# Editable install with no version control (api==1.0.0)
--e /Users/simonbachmann/Programming/pokemate-name-generator
 appdirs==1.4.3
 appnope==0.1.0
 astor==0.8.1
