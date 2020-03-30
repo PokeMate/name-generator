@@ -17,19 +17,16 @@ jobs:
   build:
     runs-on:
       - ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.7]
 
     steps:
       # Checkout repo
       - uses: actions/checkout@v2
 
       # Dependencies
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.7
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -41,10 +38,10 @@ jobs:
           pytest --cov=./ --cov-report=xml --doctest-modules
 
       - name: persist coverage.xml as an artifact
-      uses: actions/upload-artifact@v1
-      with:
-        name: code-coverage-report
-            path: coverage.html
+        uses: actions/upload-artifact@v1
+        with:
+          name: code-coverage-report
+          path: coverage.xml
       # # Sonar Qube
       # - name: SonarCloud Scan
       #   uses: sonarsource/sonarcloud-github-action@master
