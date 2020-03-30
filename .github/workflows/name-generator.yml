@@ -19,7 +19,7 @@ jobs:
       - ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7]
+        python-version: [3.7]
 
     steps:
       - uses: actions/checkout@v2
@@ -33,5 +33,5 @@ jobs:
           pip install -r requirements.txt
       - name: Test with pytest
         run: |
-          pip install pytest
-          pytest
+          coverage run -m pytest
+          coverage xml
