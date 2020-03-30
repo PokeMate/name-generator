@@ -3,6 +3,6 @@ venv
 .vscode
 api/__pycache__/
 .scannerwork
-coverage.xml
+# coverage.xml
 .coverage
 htmlcov
