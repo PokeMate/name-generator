@@ -81,7 +81,7 @@ docker run -p 5000:5000/tcp name-generator
 ### Run tests
 
 ```bash
-python -m unittest discover app/
+coverage run -m pytest
 ```
 
 ### API
