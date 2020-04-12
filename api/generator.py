@@ -12,7 +12,16 @@ import os
 from tensorflow.keras.models import load_model
 
 # To hide warnings
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+
+
+config = tf.ConfigProto(
+    device_count={"GPU": 1}, intra_op_parallelism_threads=1, allow_soft_placement=True
+)
+config.gpu_options.allow_growth = True
+config.gpu_options.per_process_gpu_memory_fraction = 0.6
+session = tf.Session(config=config)
+keras.backend.set_session(session)
 
 
 class NameGenerator:
@@ -21,7 +30,7 @@ class NameGenerator:
         self.input_names = load_names(input_names_path)
 
         # Make it them to a long string
-        self.concat_names = '\n'.join(self.input_names).lower()
+        self.concat_names = "\n".join(self.input_names).lower()
 
         # Find all unique characters by using set()
         self.chars = sorted(list(set(self.concat_names)))
@@ -34,20 +43,19 @@ class NameGenerator:
         self.num_chars = len(self.chars)
 
         # Use longest name length as our sequence window
-        self.max_sequence_length = max(
-            [len(name) for name in self.input_names])
+        self.max_sequence_length = max([len(name) for name in self.input_names])
 
-        self.sequence = self.concat_names[-(
-            self.max_sequence_length - 1):] + '\n'
+        self.sequence = self.concat_names[-(self.max_sequence_length - 1) :] + "\n"
 
         # Load the model
         self.model = load_model(model_path)
+        self.model._make_predict_function()
 
     def generate_names(self, gen_amount):
         new_names = []
 
         if gen_amount < 1 or gen_amount > 10:
-            raise(Exception)
+            raise (Exception)
 
         while len(new_names) < gen_amount:
 
@@ -57,27 +65,32 @@ class NameGenerator:
                 x[0, i, self.char2idx[char]] = 1
 
             # Sample next char from predicted probabilities
-            probs = self.model.predict(x, verbose=0)[0]
-            probs /= probs.sum()
-            next_idx = np.random.choice(len(probs), p=probs)
-            next_char = self.idx2char[next_idx]
-            self.sequence = self.sequence[1:] + next_char
+            try:
+                with session.as_default():
+                    with session.graph.as_default():
+                        probs = self.model.predict(x, verbose=0)[0]
+                        probs /= probs.sum()
+                        next_idx = np.random.choice(len(probs), p=probs)
+                        next_char = self.idx2char[next_idx]
+                        self.sequence = self.sequence[1:] + next_char
 
-            # New line means we have a new name
-            if next_char == '\n':
+                        # New line means we have a new name
+                        if next_char == "\n":
 
-                gen_name = [name for name in self.sequence.split('\n')][1]
+                            gen_name = [name for name in self.sequence.split("\n")][1]
 
-                # Never start name with two identical chars, could probably also
-                if len(gen_name) > 2 and gen_name[0] == gen_name[1]:
-                    gen_name = gen_name[1:]
+                            # Never start name with two identical chars, could probably also
+                            if len(gen_name) > 2 and gen_name[0] == gen_name[1]:
+                                gen_name = gen_name[1:]
 
-                # Discard all names that are too short
-                if len(gen_name) > 2:
+                            # Discard all names that are too short
+                            if len(gen_name) > 2:
 
-                    # Only allow new and unique names
-                    if gen_name not in self.input_names + new_names:
-                        new_names.append(gen_name.capitalize())
+                                # Only allow new and unique names
+                                if gen_name not in self.input_names + new_names:
+                                    new_names.append(gen_name.capitalize())
+            except:
+                print("Name Generation Error")
 
         return new_names
 

@@ -61,7 +61,7 @@ pip3 install -r requirements.txt
 Start the API
 
 ```bash
-python3 -m app/api.py
+python3 api/main.py
 ```
 
 ### With Docker
